@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="static/favicon.svg" alt="kbye" width="80" height="80">
+  <img src="src/lib/assets/favicon.svg" alt="kbye" width="80" height="80">
 </p>
 
 <h1 align="center">kbye</h1>
@@ -34,4 +34,4 @@ bun run build
 
 ## License
 
-All rights reserved. © 2025 Giorgio Brullo
+All rights reserved. © 2026 Giorgio Brullo
