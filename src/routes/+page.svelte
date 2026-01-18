@@ -4,12 +4,16 @@
 	import Logo from '$lib/components/Logo.svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 
-	let input = $state('');
-	let output = $state('');
+	let { data } = $props();
+
+	let input = $state(data.input || '');
+	let output = $state(data.output || '');
 	let error = $state('');
 	let copied = $state(false);
 	let hasTouch = $state(false);
+	let currentMode = $state<'e' | 'd' | null>(data.mode);
 
 	$effect(() => {
 		if (browser) {
@@ -19,16 +23,28 @@
 
 	function updateUrl(mode: 'e' | 'd', text: string) {
 		if (browser && text) {
-			window.history.replaceState(null, '', `#${mode}:${encodeURIComponent(text)}`);
+			const url = new URL(window.location.href);
+			url.searchParams.delete('e');
+			url.searchParams.delete('d');
+			url.searchParams.set(mode, text);
+			url.hash = '';
+			window.history.replaceState(null, '', url.toString());
+			currentMode = mode;
 		}
 	}
 
 	function clearUrl() {
 		if (browser) {
-			window.history.replaceState(null, '', window.location.pathname);
+			const url = new URL(window.location.href);
+			url.searchParams.delete('e');
+			url.searchParams.delete('d');
+			url.hash = '';
+			window.history.replaceState(null, '', url.pathname);
+			currentMode = null;
 		}
 	}
 
+	// Support legacy hash URLs
 	function loadFromHash() {
 		const hash = window.location.hash.slice(1);
 		if (!hash) return;
@@ -41,22 +57,33 @@
 
 		const [, mode, text] = match;
 		try {
-			input = decodeURIComponent(text);
+			const decodedText = decodeURIComponent(text);
+			input = decodedText;
 			if (mode === 'e') {
-				output = encode(input);
+				output = encode(decodedText);
 			} else {
-				output = decode(input);
+				output = decode(decodedText);
 			}
+			// Migrate to query param URL
+			updateUrl(mode as 'e' | 'd', decodedText);
 		} catch {
 			clearUrl();
 		}
 	}
 
 	onMount(() => {
-		loadFromHash();
-		window.addEventListener('hashchange', loadFromHash);
-		return () => window.removeEventListener('hashchange', loadFromHash);
+		// Only load from hash if we don't have server data
+		if (!data.input) {
+			loadFromHash();
+		}
 	});
+
+	// Computed OG image URL
+	let ogImageUrl = $derived(
+		currentMode && input
+			? `https://kbye.lol/api/og?${currentMode}=${encodeURIComponent(input)}`
+			: 'https://kbye.lol/og-image.png'
+	);
 
 	function handleEncode() {
 		error = '';
@@ -129,7 +156,7 @@
 		siteName: 'kbye',
 		images: [
 			{
-				url: 'https://kbye.lol/og-image.png',
+				url: data.ogImageUrl ? `https://kbye.lol${data.ogImageUrl}` : 'https://kbye.lol/og-image.png',
 				width: 1200,
 				height: 630,
 				alt: 'kbye - Hide messages in boring replies'
@@ -140,7 +167,7 @@
 		cardType: 'summary_large_image',
 		title: 'kbye',
 		description: 'Hide secret messages in boring replies.',
-		image: 'https://kbye.lol/og-image.png'
+		image: data.ogImageUrl ? `https://kbye.lol${data.ogImageUrl}` : 'https://kbye.lol/og-image.png'
 	}}
 />
 
