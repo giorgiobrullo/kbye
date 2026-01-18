@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="24" fill="#18181b"/>
+  <!-- Water drop -->
+  <path d="M64 24c0 0-28 32-28 52c0 15.464 12.536 28 28 28s28-12.536 28-28c0-20-28-52-28-52z" fill="none" stroke="#fafafa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Slash through it -->
+  <line x1="36" y1="96" x2="92" y2="40" stroke="#fafafa" stroke-width="6" stroke-linecap="round"/>
+</svg>
