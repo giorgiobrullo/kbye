@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { MetaTags } from 'svelte-meta-tags';
-	import { encode, decode } from '$lib/translator';
+	import { encode, decode, ALL_WORDS } from '$lib/translator';
 	import Logo from '$lib/components/Logo.svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
@@ -251,7 +251,7 @@
 		<footer class="pt-16 border-t border-zinc-900">
 			<p class="text-zinc-700 text-sm font-mono mb-2">DICTIONARY</p>
 			<div class="flex flex-wrap gap-2">
-				{#each ['ok', 'oke', 'k', 'bye', 'lol', 'cool', 'nice', 'sure', 'yeah'] as word}
+				{#each ALL_WORDS as word}
 					<span class="px-3 py-1 bg-zinc-950 border border-zinc-800 text-zinc-500 text-sm font-mono">
 						{word}
 					</span>

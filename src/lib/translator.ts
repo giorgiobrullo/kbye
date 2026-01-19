@@ -1,13 +1,13 @@
 // 8 values, some with synonyms
 const DICTIONARY: string[][] = [
-	['ok', 'oke'],  // 000
-	['k'],          // 001
-	['bye'],        // 010
-	['lol'],        // 011
-	['cool'],       // 100
-	['nice'],       // 101
-	['sure'],       // 110
-	['yeah'],       // 111
+	['ok', 'oke', 'okay'],           // 000
+	['k', 'kk'],                     // 001
+	['bye', 'cya', 'bai'],           // 010
+	['lol', 'lmao', 'haha'],         // 011
+	['cool', 'kool'],                // 100
+	['nice', 'noice'],               // 101
+	['sure', 'yup', 'yep'],          // 110
+	['yeah', 'yea', 'ya'],           // 111
 ];
 
 const BITS_PER_WORD = 3;
